@@ -181,36 +181,53 @@ function Hero() {
 
 // About Section
 function About() {
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 500], [0, -100])
+  const y2 = useTransform(scrollY, [0, 500], [0, -50])
+
   return (
-    <section id="about" className="py-32 bg-slate-50/50">
+    <section id="about" className="py-32 bg-slate-50/50 overflow-hidden">
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: y1 }}>
+        <div className="absolute top-10 left-1/4 w-64 h-64 bg-blue-100/30 rounded-full blur-3xl" />
+      </motion.div>
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: y2 }}>
+        <div className="absolute bottom-20 right-1/3 w-80 h-80 bg-indigo-100/30 rounded-full blur-3xl" />
+      </motion.div>
+
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           <ScrollReveal>
             <div className="flex items-center gap-2 mb-8">
-              <div className="w-12 h-[1px] bg-blue-700" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: 48 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="h-[1px] bg-blue-700"
+              />
               <span className="text-sm font-medium text-blue-700 uppercase tracking-wider">About</span>
             </div>
           </ScrollReveal>
-          
+
           <ScrollReveal delay={0.1}>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-8 leading-tight" style={{ fontFamily: '"Playfair Display", serif' }}>
               Building systems that <span className="text-blue-700">actually work</span> in the real world
             </h2>
           </ScrollReveal>
-          
+
           <ScrollReveal delay={0.2}>
             <div className="space-y-6 text-slate-600 max-w-2xl">
               <p className="text-lg leading-relaxed">
-                I&apos;m a Computer Science undergraduate at Polaris School of Technology, Bengaluru, 
+                I&apos;m a Computer Science undergraduate at Polaris School of Technology, Bengaluru,
                 specializing in Artificial Intelligence and Machine Learning.
               </p>
               <p className="text-lg leading-relaxed">
-                Beyond theory, I love building <span className="text-slate-900 font-medium">practical systems</span> — whether it&apos;s 
-                RAG architectures, AI agents, ML pipelines, or scalable backend services. I believe the best 
+                Beyond theory, I love building <span className="text-slate-900 font-medium">practical systems</span> — whether it&apos;s
+                RAG architectures, AI agents, ML pipelines, or scalable backend services. I believe the best
                 solutions come from understanding both the fundamentals and the real constraints of production systems.
               </p>
               <p className="text-lg leading-relaxed">
-                Currently focused on <span className="text-slate-900 font-medium">NotewiseAI</span>, an AI-powered 
+                Currently focused on <span className="text-slate-900 font-medium">NotewiseAI</span>, an AI-powered
                 document copilot, while exploring the frontiers of AI agents, retrieval systems, and intelligent automation.
               </p>
             </div>
@@ -245,7 +262,7 @@ function Skills() {
       skills: ["Data Structures & Algorithms", "REST APIs", "AI Agents", "Selenium Automation", "Git"]
     }
   ]
-  
+
   return (
     <section id="skills" className="py-32">
       <div className="container mx-auto px-6">
@@ -255,29 +272,38 @@ function Skills() {
             <span className="text-sm font-medium text-blue-700 uppercase tracking-wider">Skills</span>
           </div>
         </ScrollReveal>
-        
+
         <ScrollReveal delay={0.1}>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-16" style={{ fontFamily: '"Playfair Display", serif' }}>
             My Toolkit
           </h2>
         </ScrollReveal>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {skillCategories.map((category, index) => (
             <ScrollReveal key={category.title} delay={0.1 + index * 0.1}>
-              <motion.div 
-                whileHover={{ y: -4 }}
-                className="p-6 bg-white border border-slate-100 rounded-2xl"
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="p-6 bg-white border border-slate-100 rounded-2xl hover:shadow-lg hover:shadow-blue-700/5 transition-all duration-300"
               >
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">{category.title}</h3>
                 <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill) => (
-                    <span 
+                  {category.skills.map((skill, skillIndex) => (
+                    <motion.span
                       key={skill}
-                      className="px-3 py-1.5 bg-slate-50 text-slate-600 text-sm font-medium rounded-full border border-slate-100"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.05 + skillIndex * 0.03 }}
+                      whileHover={{ scale: 1.05 }}
+                      className="px-3 py-1.5 bg-slate-50 text-slate-600 text-sm font-medium rounded-full border border-slate-100 cursor-default"
                     >
                       {skill}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               </motion.div>
@@ -308,7 +334,7 @@ function Projects() {
         "Developing quiz generation, flashcards, summaries, and audio outputs"
       ],
       featured: true,
-      github: "https://github.com/rehanxt5/notewiseai"
+      github: "https://github.com/rehanxt5/notewiseAI---showcase"
     },
     {
       id: 2,
@@ -490,7 +516,7 @@ function Education() {
       status: ""
     }
   ]
-  
+
   return (
     <section id="education" className="py-32">
       <div className="container mx-auto px-6">
@@ -500,27 +526,48 @@ function Education() {
             <span className="text-sm font-medium text-blue-700 uppercase tracking-wider">Education</span>
           </div>
         </ScrollReveal>
-        
+
         <ScrollReveal delay={0.1}>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-16" style={{ fontFamily: '"Playfair Display", serif' }}>
             Academic Journey
           </h2>
         </ScrollReveal>
-        
+
         <div className="space-y-6">
           {education.map((edu, index) => (
             <ScrollReveal key={edu.institution} delay={0.2 + index * 0.1}>
-              <motion.div 
-                whileHover={{ x: 4 }}
-                className="flex flex-col md:flex-row md:items-center justify-between p-8 bg-white border border-slate-100 rounded-2xl hover:border-blue-100 transition-colors"
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                whileHover={{ x: 8, scale: 1.01 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="flex flex-col md:flex-row md:items-center justify-between p-8 bg-white border border-slate-100 rounded-2xl hover:border-blue-100 hover:shadow-lg hover:shadow-blue-700/5 transition-all duration-300"
               >
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-slate-900 mb-1">{edu.institution}</h3>
+                  <div className="flex items-center gap-3 mb-1">
+                    <h3 className="text-xl font-semibold text-slate-900">{edu.institution}</h3>
+                    {edu.status && (
+                      <motion.span
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3 + index * 0.1 }}
+                        className="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-medium rounded-full"
+                      >
+                        {edu.status}
+                      </motion.span>
+                    )}
+                  </div>
                   <p className="text-slate-500">{edu.degree}</p>
                 </div>
                 <div className="flex items-center gap-8 mt-4 md:mt-0">
                   <span className="text-slate-600 font-medium">{edu.period}</span>
-                  <span className="text-xl font-bold text-blue-700">{edu.grade}</span>
+                  <motion.span
+                    whileHover={{ scale: 1.1 }}
+                    className="text-xl font-bold text-blue-700"
+                  >
+                    {edu.grade}
+                  </motion.span>
                 </div>
               </motion.div>
             </ScrollReveal>
@@ -539,10 +586,20 @@ function Contact() {
     { name: "LeetCode", url: "https://leetcode.com/u/wtIv1QjUXU/", icon: SiLeetcode },
     { name: "Email", url: "mailto:rehan.xt5@gmail.com", icon: FaEnvelope }
   ]
-  
+
   return (
-    <section id="contact" className="py-32 bg-slate-900">
-      <div className="container mx-auto px-6">
+    <section id="contact" className="py-32 bg-slate-900 overflow-hidden">
+      {/* Background glow */}
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{ duration: 8, repeat: Infinity }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[100px] pointer-events-none"
+      />
+
+      <div className="container mx-auto px-6 relative z-10">
         <ScrollReveal>
           <div className="text-center mb-16">
             <span className="inline-block text-sm font-medium text-blue-400 uppercase tracking-wider mb-6">Contact</span>
@@ -554,37 +611,46 @@ function Contact() {
             </p>
           </div>
         </ScrollReveal>
-        
+
         <ScrollReveal delay={0.2}>
           <div className="flex flex-wrap justify-center gap-6 mb-16">
-            {socialLinks.map((link) => (
-              <a 
+            {socialLinks.map((link, index) => (
+              <motion.a
                 key={link.name}
                 href={link.url}
                 target={link.name === "Email" ? "_self" : "_blank"}
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-6 py-3 bg-slate-800 text-white rounded-full hover:bg-blue-700 transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-3 px-6 py-3 bg-slate-800 text-white rounded-full hover:bg-blue-700 transition-all duration-300 border border-slate-700 hover:border-blue-500"
               >
                 <link.icon className="text-xl" />
                 {link.name}
-              </a>
+              </motion.a>
             ))}
           </div>
         </ScrollReveal>
-        
+
         <ScrollReveal delay={0.3}>
           <div className="text-center">
-            <p className="text-slate-500 mb-4">
+            <motion.p
+              whileHover={{ scale: 1.05 }}
+              className="text-slate-500 mb-4"
+            >
               rehan.xt5@gmail.com
-            </p>
+            </motion.p>
             <p className="text-slate-600">
               Based in Bengaluru, India
             </p>
           </div>
         </ScrollReveal>
-        
+
         {/* Footer */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
